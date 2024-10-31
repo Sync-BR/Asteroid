@@ -1,7 +1,5 @@
 package cairu.asteroids.gamestates;
 
-import cairu.asteroids.gamestates.GameState;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -25,15 +23,12 @@ public class HighScoreState extends GameState {
 	}
 
 	public void init() {
-
 		sb = new SpriteBatch();
-
         font = new BitmapFont();
         font.setColor(Color.WHITE);
         Save.load();
 		highScores = Save.gd.getHighScores();
 		names = Save.gd.getNames();
-
 	}
 
 	public void update(float dt) {
@@ -42,22 +37,19 @@ public class HighScoreState extends GameState {
 
     public void draw() {
         sb.setProjectionMatrix(Game.cam.combined);
-
         sb.begin();
-
         String s;
-        GlyphLayout layout = new GlyphLayout(); // Criar uma instância de GlyphLayout
-
+        GlyphLayout layout = new GlyphLayout();
         s = "High Scores";
-        layout.setText(font, s); // Definir o texto a ser medido
-        float w = layout.width; // Obter a largura do texto
-        font.draw(sb, s, (Game.WIDTH - w) / 2, 300); // Centralizar o texto
+        layout.setText(font, s);
+        float w = layout.width;
+        font.draw(sb, s, (Game.WIDTH - w) / 2, 300);
 
         for (int i = 0; i < highScores.length; i++) {
             s = String.format("%2d. %7s %s", i + 1, highScores[i], names[i]);
-            layout.setText(font, s); // Medir a largura do texto formatado
-            w = layout.width; // Obter a largura do texto
-            font.draw(sb, s, (Game.WIDTH - w) / 2, 270 - 20 * i); // Centralizar o texto
+            layout.setText(font, s);
+            w = layout.width;
+            font.draw(sb, s, (Game.WIDTH - w) / 2, 270 - 20 * i);
         }
 
         sb.end();

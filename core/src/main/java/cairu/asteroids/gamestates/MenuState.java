@@ -86,18 +86,16 @@ public class MenuState extends GameState {
 	}
 
 	public void draw() {
-//
+
 		sb.setProjectionMatrix(Game.cam.combined);
 		sr.setProjectionMatrix(Game.cam.combined);
 
-		// draw asteroids
 		for(int i = 0; i < asteroids.size(); i++) {
 			asteroids.get(i).draw(sr);
 		}
 
 		sb.begin();
 
-		// draw title
         float width = titleFont.getRegion().getRegionWidth() * titleFont.getScaleX();
         titleFont.draw(
             sb,
@@ -107,7 +105,6 @@ public class MenuState extends GameState {
         );
 
         for (int i = 0; i < menuItems.length; i++) {
-            // Calcula a largura do item do menu
             width = font.getRegion().getRegionWidth() * font.getScaleX();
             if (currentItem == i) font.setColor(Color.RED);
             else font.setColor(Color.WHITE);
@@ -141,12 +138,11 @@ public class MenuState extends GameState {
 
 	}
 
+    //Menu select
 	private void select() {
-		// play
 		if(currentItem == 0) {
 			gsm.setState(GameStateManager.PLAY);
 		}
-		// high scores
 		else if(currentItem == 1) {
 			gsm.setState(GameStateManager.HIGHSCORE);
 		}

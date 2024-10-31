@@ -1,7 +1,5 @@
 package cairu.asteroids.gamestates;
-
 import cairu.asteroids.managers.Save;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,11 +13,9 @@ public class GameOverState extends GameState{
 
 	private SpriteBatch sb;
 	private ShapeRenderer sr;
-
 	private boolean newHighScore;
 	private char[] newName;
 	private int currentChar;
-
 	private BitmapFont gameOverFont;
 	private BitmapFont font;
 
@@ -39,10 +35,7 @@ public class GameOverState extends GameState{
 			currentChar = 0;
 		}
         gameOverFont = new BitmapFont();
-        font = new BitmapFont(); //
-
-
-
+        font = new BitmapFont();
 	}
 
 	public void update(float dt) {
@@ -50,29 +43,21 @@ public class GameOverState extends GameState{
 	}
 
 	public void draw() {
-        GlyphLayout layout = new GlyphLayout(); // Para calcular as dimensões do texto
-
+        GlyphLayout layout = new GlyphLayout();
 		sb.setProjectionMatrix(Game.cam.combined);
-
 		sb.begin();
-
         String s = "Game Over";
         layout.setText(gameOverFont, s);
         float w = layout.width;
-
 		gameOverFont.draw(sb, s, (Game.WIDTH - w) / 2, 220);
-
 		if(!newHighScore) {
 			sb.end();
 			return;
 		}
-
         s = "New High Score: " + Save.gd.getTentativeScore();
         layout.setText(font, s);
         w = layout.width;
         font.draw(sb, s, (Game.WIDTH - w) / 2, 180);
-
-
         for(int i = 0; i < newName.length; i++) {
 			font.draw(
 				sb,
@@ -81,9 +66,7 @@ public class GameOverState extends GameState{
 				120
 			);
 		}
-
 		sb.end();
-
 		sr.begin(ShapeType.Line);
 		sr.line(
 			230 + 14 * currentChar,
@@ -92,11 +75,9 @@ public class GameOverState extends GameState{
 			100
 		);
 		sr.end();
-
 	}
 
 	public void handleInput() {
-
 		if(GameKeys.isPressed(GameKeys.ENTER)) {
 			if(newHighScore) {
 				Save.gd.addHighScore(
@@ -107,7 +88,6 @@ public class GameOverState extends GameState{
 			}
 			gsm.setState(GameStateManager.MENU);
 		}
-
 		if(GameKeys.isPressed(GameKeys.UP)) {
 			if(newName[currentChar] == ' ') {
 				newName[currentChar] = 'Z';

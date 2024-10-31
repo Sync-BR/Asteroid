@@ -53,23 +53,15 @@ public class PlayState extends GameState {
 	}
 
 	public void init() {
-
 		sb = new SpriteBatch();
 		sr = new ShapeRenderer();
-
         font = new BitmapFont();
-
         bullets = new ArrayList<Bullet>();
-
 		player = new Player(bullets);
-
 		asteroids = new ArrayList<Asteroid>();
-
 		particles = new ArrayList<Particle>();
-
 		level = 1;
 		spawnAsteroids();
-
 		hudPlayer = new Player(null);
 
 		fsTimer = 0;
@@ -112,23 +104,17 @@ public class PlayState extends GameState {
 	}
 
 	private void spawnAsteroids() {
-
 		asteroids.clear();
-
 		int numToSpawn = 4 + level - 1;
 		totalAsteroids = numToSpawn * 7;
 		numAsteroidsLeft = totalAsteroids;
 		currentDelay = maxDelay;
-
 		for(int i = 0; i < numToSpawn; i++) {
-
 			float x = MathUtils.random(Game.WIDTH);
 			float y = MathUtils.random(Game.HEIGHT);
-
 			float dx = x - player.getx();
 			float dy = y - player.gety();
 			float dist = (float) Math.sqrt(dx * dx + dy * dy);
-
 			while(dist < 100) {
 				x = MathUtils.random(Game.WIDTH);
 				y = MathUtils.random(Game.HEIGHT);
@@ -136,25 +122,18 @@ public class PlayState extends GameState {
 				dy = y - player.gety();
 				dist = (float) Math.sqrt(dx * dx + dy * dy);
 			}
-
 			asteroids.add(new Asteroid(x, y, Asteroid.LARGE));
-
 		}
 
 	}
 
 	public void update(float dt) {
-
-		// get user input
 		handleInput();
-
-		// next level
 		if(asteroids.size() == 0) {
 			level++;
 			spawnAsteroids();
 		}
 
-		// update player
 		player.update(dt);
 		if(player.isDead()) {
 			if(player.getLives() == 0) {
@@ -171,7 +150,6 @@ public class PlayState extends GameState {
 			return;
 		}
 
-		// update player bullets
 		for(int i = 0; i < bullets.size(); i++) {
 			bullets.get(i).update(dt);
 			if(bullets.get(i).shouldRemove()) {
@@ -180,7 +158,6 @@ public class PlayState extends GameState {
 			}
 		}
 
-		// update flying saucer
 		if(flyingSaucer == null) {
 			fsTimer += dt;
 			if(fsTimer >= fsTime) {
@@ -197,7 +174,6 @@ public class PlayState extends GameState {
 								);
 			}
 		}
-		// if there is a flying saucer already
 		else {
 			flyingSaucer.update(dt);
 			if(flyingSaucer.shouldRemove()) {
@@ -207,7 +183,6 @@ public class PlayState extends GameState {
 			}
 		}
 
-		// update fs bullets
 		for(int i = 0; i < enemyBullets.size(); i++) {
 			enemyBullets.get(i).update(dt);
 			if(enemyBullets.get(i).shouldRemove()) {
@@ -216,7 +191,6 @@ public class PlayState extends GameState {
 			}
 		}
 
-		// update asteroids
 		for(int i = 0; i < asteroids.size(); i++) {
 			asteroids.get(i).update(dt);
 			if(asteroids.get(i).shouldRemove()) {
@@ -225,7 +199,6 @@ public class PlayState extends GameState {
 			}
 		}
 
-		// update particles
 		for(int i = 0; i < particles.size(); i++) {
 			particles.get(i).update(dt);
 			if(particles.get(i).shouldRemove()) {
@@ -233,11 +206,7 @@ public class PlayState extends GameState {
 				i--;
 			}
 		}
-
-		// check collision
 		checkCollisions();
-
-		// play bg music
 		bgTimer += dt;
 		if(!player.isHit() && bgTimer >= currentDelay) {
 			if(playLowPulse) {
@@ -253,8 +222,6 @@ public class PlayState extends GameState {
 	}
 
 	private void checkCollisions() {
-
-		// player-asteroid collision
 		if(!player.isHit()) {
 			for(int i = 0; i < asteroids.size(); i++) {
 				Asteroid a = asteroids.get(i);
@@ -269,7 +236,6 @@ public class PlayState extends GameState {
 			}
 		}
 
-		// bullet-asteroid collision
 		for(int i = 0; i < bullets.size(); i++) {
 			Bullet b = bullets.get(i);
 			for(int j = 0; j < asteroids.size(); j++) {
@@ -287,7 +253,6 @@ public class PlayState extends GameState {
 			}
 		}
 
-		// player-flying saucer collision
 		if(flyingSaucer != null) {
 			if(player.intersects(flyingSaucer)) {
 				player.hit();
@@ -300,7 +265,6 @@ public class PlayState extends GameState {
 			}
 		}
 
-		// bullet-flying saucer collision
 		if(flyingSaucer != null) {
 			for(int i = 0; i < bullets.size(); i++) {
 				Bullet b = bullets.get(i);
@@ -321,7 +285,6 @@ public class PlayState extends GameState {
 			}
 		}
 
-		// player-enemy bullets collision
 		if(!player.isHit()) {
 			for(int i = 0; i < enemyBullets.size(); i++) {
 				Bullet b = enemyBullets.get(i);
@@ -335,7 +298,6 @@ public class PlayState extends GameState {
 			}
 		}
 
-		// flying saucer-asteroid collision
 		if(flyingSaucer != null) {
 			for(int i = 0; i < asteroids.size(); i++) {
 				Asteroid a = asteroids.get(i);
@@ -357,7 +319,6 @@ public class PlayState extends GameState {
 			}
 		}
 
-		// asteroid-enemy bullet collision
 		for(int i = 0; i < enemyBullets.size(); i++) {
 			Bullet b = enemyBullets.get(i);
 			for(int j = 0; j < asteroids.size(); j++) {
@@ -381,42 +342,31 @@ public class PlayState extends GameState {
 
 		sb.setProjectionMatrix(Game.cam.combined);
 		sr.setProjectionMatrix(Game.cam.combined);
-
-		// draw player
 		player.draw(sr);
 
-		// draw bullets
 		for(int i = 0; i < bullets.size(); i++) {
 			bullets.get(i).draw(sr);
 		}
-
-		// draw flying saucer
-		if(flyingSaucer != null) {
+        if(flyingSaucer != null) {
 			flyingSaucer.draw(sr);
 		}
-
-		// draw fs bullets
-		for(int i = 0; i < enemyBullets.size(); i++) {
+        for(int i = 0; i < enemyBullets.size(); i++) {
 			enemyBullets.get(i).draw(sr);
 		}
 
-		// draw asteroids
 		for(int i = 0; i < asteroids.size(); i++) {
 			asteroids.get(i).draw(sr);
 		}
 
-		// draw particles
 		for(int i = 0; i < particles.size(); i++) {
 			particles.get(i).draw(sr);
 		}
 
-		// draw score
 		sb.setColor(1, 1, 1, 1);
 		sb.begin();
 		font.draw(sb, Long.toString(player.getScore()), 40, 390);
 		sb.end();
 
-		// draw lives
 		for(int i = 0; i < player.getLives(); i++) {
 			hudPlayer.setPosition(40 + i * 10, 360);
 			hudPlayer.draw(sr);
